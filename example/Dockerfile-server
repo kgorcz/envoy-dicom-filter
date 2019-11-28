@@ -1,0 +1,11 @@
+FROM ruby:2.6
+
+RUN gem install dicom
+
+RUN mkdir /app
+WORKDIR /app
+
+COPY server.rb .
+
+CMD ["ruby", "server.rb"]
+

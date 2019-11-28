@@ -1,0 +1,5 @@
+FROM ubuntu:eoan 
+
+COPY envoy /usr/local/bin/envoy
+
+CMD /usr/local/bin/envoy -c /etc/envoy.yaml

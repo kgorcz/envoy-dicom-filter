@@ -1,0 +1,46 @@
+version: "3"
+services:
+
+  envoy:
+    build:
+      context: ../bazel-bin
+      dockerfile: ../../../example/Dockerfile-envoy
+    volumes:
+      - ./envoy-dicom.yaml:/etc/envoy.yaml
+    networks:
+      - envoymesh
+    expose:
+      - "1104"
+      - "9901"
+    ports:
+      - "10000:1104"
+      - "9901:9901"
+
+  service1:
+    build:
+      context: .
+      dockerfile: Dockerfile-server
+    networks:
+      envoymesh:
+        aliases:
+          - service1
+    environment:
+      - SERVICE_NAME=1
+    expose:
+      - "104"
+
+  service2:
+    build:
+      context: .
+      dockerfile: Dockerfile-server
+    networks:
+      envoymesh:
+        aliases:
+          - service2
+    environment:
+      - SERVICE_NAME=2
+    expose:
+      - "104"
+
+networks:
+  envoymesh: {}

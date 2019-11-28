@@ -11,45 +11,31 @@ envoy_cc_binary(
     name = "envoy",
     repository = "@envoy",
     deps = [
-        ":echo2_config",
+        ":dicom_config",
         "@envoy//source/exe:envoy_main_entry_lib",
     ],
 )
 
 envoy_cc_library(
-    name = "echo2_lib",
-    srcs = ["echo2.cc"],
-    hdrs = ["echo2.h"],
+    name = "dicom_lib",
+    srcs = ["dicom.cc"],
+    hdrs = ["dicom.h"],
     repository = "@envoy",
-    deps = [
-        "@envoy//include/envoy/buffer:buffer_interface",
-        "@envoy//include/envoy/network:connection_interface",
-        "@envoy//include/envoy/network:filter_interface",
-        "@envoy//source/common/common:assert_lib",
-        "@envoy//source/common/common:logger_lib",
-    ],
+    deps = ["@envoy//include/envoy/network:filter_interface",
+            "@envoy//include/envoy/network:connection_interface",
+            "@envoy//source/common/common:minimal_logger_lib",
+            "@envoy//source/common/tcp_proxy"],
 )
 
 envoy_cc_library(
-    name = "echo2_config",
-    srcs = ["echo2_config.cc"],
+    name = "dicom_config",
+    srcs = ["dicom_config.cc"],
     repository = "@envoy",
     deps = [
-        ":echo2_lib",
+        ":dicom_lib",
         "@envoy//include/envoy/network:filter_interface",
         "@envoy//include/envoy/registry:registry",
         "@envoy//include/envoy/server:filter_config_interface",
-    ],
-)
-
-envoy_cc_test(
-    name = "echo2_integration_test",
-    srcs = ["echo2_integration_test.cc"],
-    data =  ["echo2_server.yaml"],
-    repository = "@envoy",
-    deps = [
-        ":echo2_config",
-        "@envoy//test/integration:integration_lib"
     ],
 )
 
