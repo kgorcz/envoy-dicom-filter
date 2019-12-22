@@ -7,6 +7,8 @@
 #include "envoy/network/connection.h"
 #include "common/common/assert.h"
 #include "common/tcp_proxy/tcp_proxy.h"
+#include "dcmtk/ofstd/ofstring.h"
+#include "dcmtk/dcmdata/dcdict.h"
 
 namespace Envoy {
 namespace Extensions {
@@ -15,6 +17,8 @@ namespace Dicom {
 
 Network::FilterStatus DicomFilter::onData(Buffer::Instance& data, bool /*end_stream*/)
 {
+    DcmDataDictionary dcmdat(false, false);
+
     if(called_application_entity_title.empty() && data.length() >= 26) {
         char buf_called_ae[17];
         memset(buf_called_ae, 0, 17);
